@@ -18,11 +18,10 @@ class AppDelegate: RCTAppDelegate {
 
     override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         print("React Native Initializing...")
-        self.moduleName = "ReproducerApp"
-        self.launchOptions = launchOptions
+        self.automaticallyLoadReactNativeWindow = false
         super.application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        window = UIWindow(frame: UIScreen.main.bounds)
+        window = UIWindow()
         window.rootViewController = ViewController()
         window.makeKeyAndVisible()
         
@@ -30,14 +29,14 @@ class AppDelegate: RCTAppDelegate {
     }
 
     override func sourceURL(for bridge: RCTBridge) -> URL? {
-        return self.bundleURL()
+        self.bundleURL()
     }
 
     override func bundleURL() -> URL? {
         #if DEBUG
-        return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+        RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
         #else
-        return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+        Bundle.main.url(forResource: "main", withExtension: "jsbundle")
         #endif
     }
 
@@ -47,23 +46,5 @@ class AppDelegate: RCTAppDelegate {
 
     override func applicationDidBecomeActive(_ application: UIApplication) {
         
-    }
-
-    // MARK: - Orientation Lock
-    struct AppUtility {
-        static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
-            if let delegate = UIApplication.shared.delegate as? AppDelegate {
-                delegate.orientationLock = orientation
-            }
-        }
-        
-        static func lockOrientation(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation: UIInterfaceOrientation) {
-            self.lockOrientation(orientation)
-            UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
-        }
-    }
-    
-    override func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        return self.orientationLock
     }
 }
